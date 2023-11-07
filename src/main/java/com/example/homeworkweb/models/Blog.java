@@ -1,24 +1,31 @@
 package com.example.homeworkweb.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="blogs")
+@Table(name = "blogs")
 public class Blog {
     @Id
     @GeneratedValue
     private Long id;
     private String title;
     private String content;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User author;
+    @ManyToMany
+    @JoinTable(name = "blog_tag",
+            joinColumns = @JoinColumn(name = "blog_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private List<Tag> tags;
 }
