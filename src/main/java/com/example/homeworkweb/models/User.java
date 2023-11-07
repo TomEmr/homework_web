@@ -21,6 +21,6 @@ public class User {
     private String userName;
     private String email;
     private String password;
-    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     private List<Blog> blogs;
 }
