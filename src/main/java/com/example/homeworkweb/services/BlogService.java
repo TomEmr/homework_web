@@ -26,8 +26,10 @@ public class BlogService {
     private final TagRepository tagRepository;
 
     public BlogDTO createNewBlog(CreateNewBlogDTO createNewBlogDTO) {
-        List<Tag> tags = tagRepository
-                .findAllById(createNewBlogDTO.getTagIDs());
+        List<Tag> tags = new ArrayList<>();
+        if (!createNewBlogDTO.getTagIDs().isEmpty()) {
+            tags = tagRepository.findAllById(createNewBlogDTO.getTagIDs());
+        }
         Blog blog = Blog.builder()
                 .title(createNewBlogDTO.getTitle())
                 .content(createNewBlogDTO.getContent())
