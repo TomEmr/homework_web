@@ -3,11 +3,14 @@ package com.example.homeworkweb.services;
 import com.example.homeworkweb.exceptions.BlogNotFoundException;
 import com.example.homeworkweb.models.Blog;
 import com.example.homeworkweb.models.Tag;
+import com.example.homeworkweb.models.dtos.BlogDTO;
 import com.example.homeworkweb.models.dtos.CreateNewBlogDTO;
 import com.example.homeworkweb.models.dtos.UpdateBlogDTO;
 import com.example.homeworkweb.repositories.BlogRepository;
 import com.example.homeworkweb.repositories.TagRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +22,7 @@ public class BlogService {
     private final BlogRepository blogRepository;
     private final TagRepository tagRepository;
 
-    public Blog createNewBlog(CreateNewBlogDTO createNewBlogDTO) {
+    public BlogDTO createNewBlog(CreateNewBlogDTO createNewBlogDTO) {
         List<Tag> tags = tagRepository
                 .findAllById(createNewBlogDTO.getTagIDs());
         Blog blog = Blog.builder()
@@ -28,20 +31,22 @@ public class BlogService {
                 .tags(tags)
                 .build();
         blogRepository.save(blog);
-        return blog;
+        return new BlogDTO(blog);
     }
 
-    public List<Blog> getAllBlogs() {
-        return blogRepository.findAll();
+    public Page<BlogDTO> getAllBlogs(Pageable pageable) {
+        return blogRepository.findAll(pageable)
+                .map(BlogDTO::new);
     }
 
-    public Blog getBlogById(Long id) {
-        return blogRepository
+    public BlogDTO getBlogById(Long id) {
+        Blog blog = blogRepository
                 .findById(id)
                 .orElseThrow(() -> new BlogNotFoundException("Blog not found"));
+        return new BlogDTO(blog);
     }
 
-    public Blog updateBlog(UpdateBlogDTO updateBlogDTO) {
+    public BlogDTO updateBlog(UpdateBlogDTO updateBlogDTO) {
         Blog blog = blogRepository
                 .findById(updateBlogDTO.getId())
                 .orElseThrow(() -> new BlogNotFoundException("Blog not found"));
@@ -50,11 +55,15 @@ public class BlogService {
         blog.setContent(updateBlogDTO.getContent());
         blog.setTags(tags);
         blogRepository.save(blog);
-        return blog;
+        return new BlogDTO(blog);
     }
 
-    public void deleteBlogById(Long id) {
-        blogRepository.deleteById(id);
+    public BlogDTO deleteBlogById(Long id) {
+        Blog blog = blogRepository
+                .findById(id)
+                .orElseThrow(() -> new BlogNotFoundException("Blog not found"));
+        blogRepository.delete(blog);
+        return new BlogDTO(blog);
     }
 
 }
