@@ -27,6 +27,11 @@ public class TagService {
     }
 
     @Transactional
+    public List<Tag> getTagsByIDs(List<Long> tagIDs) {
+        return tagRepository.findAllById(tagIDs);
+    }
+
+    @Transactional
     public Tag save(CreateNewTagDTO createNewTagDTO) {
         Tag tag = Tag.builder()
                 .name(createNewTagDTO.getName())
@@ -35,4 +40,5 @@ public class TagService {
         tagRepository.save(tag);
         return tag;
     }
+
 }
