@@ -13,7 +13,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -55,10 +58,13 @@ public class BlogService {
         Blog blog = blogRepository
                 .findById(updateBlogDTO.getId())
                 .orElseThrow(() -> new BlogNotFoundException("Blog not found"));
-        List<Tag> tags = tagRepository.findAllById(updateBlogDTO.getTagIDs());
+        Set<Tag> currentTags = new HashSet<>(blog.getTags());
+        Set<Tag> updatedTags = new HashSet<>(tagRepository.findAllById(updateBlogDTO.getTagIDs()));
+        currentTags.clear();
+        currentTags.addAll(updatedTags);
         blog.setTitle(updateBlogDTO.getTitle());
         blog.setContent(updateBlogDTO.getContent());
-        blog.setTags(tags);
+        blog.setTags(new ArrayList<>(currentTags));
         blogRepository.save(blog);
         return new BlogDTO(blog);
     }
