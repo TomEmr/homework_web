@@ -23,9 +23,6 @@ public class Blog {
     private Long id;
     private String title;
     private String content;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User author;
     @ManyToMany
     @JoinTable(name = "blog_tag",
             joinColumns = @JoinColumn(name = "blog_id"),
