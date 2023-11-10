@@ -33,6 +33,15 @@ public class BlogController {
         return ResponseEntity.ok(blogService.getBlogById(id));
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<?> searchBlogs(
+            @RequestParam String keyword,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(
+                blogService.searchBlogs(keyword, PageRequest.of(page - 1, size)));
+    }
+
     @PutMapping
     public ResponseEntity<?> updateBlog(@RequestBody UpdateBlogDTO updateBlogDTO) {
         return ResponseEntity.ok(blogService.updateBlog(updateBlogDTO));

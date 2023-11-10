@@ -39,6 +39,11 @@ public class BlogService {
                 .map(BlogDTO::new);
     }
 
+    public Page<BlogDTO> searchBlogs(String keyword, Pageable pageable) {
+        return blogRepository.findByTitleContainingOrContentContaining(keyword, pageable)
+                .map(BlogDTO::new);
+    }
+
     public BlogDTO getBlogById(Long id) {
         Blog blog = blogRepository
                 .findById(id)
