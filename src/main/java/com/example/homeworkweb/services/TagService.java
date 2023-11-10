@@ -18,22 +18,10 @@ public class TagService {
 
     private final TagRepository tagRepository;
 
-    @Transactional
-    public Optional<TagDTO> findById(Long id) {
-        return tagRepository.findById(id)
-                .map(tag -> new TagDTO(tag.getId(), tag.getName()));
-    }
 
     @Transactional
     public List<TagDTO> findAll() {
         return tagRepository.findAll().stream()
-                .map(tag -> new TagDTO(tag.getId(), tag.getName()))
-                .collect(Collectors.toList());
-    }
-
-    @Transactional
-    public List<TagDTO> getTagsByIDs(List<Long> tagIDs) {
-        return tagRepository.findAllById(tagIDs).stream()
                 .map(tag -> new TagDTO(tag.getId(), tag.getName()))
                 .collect(Collectors.toList());
     }
