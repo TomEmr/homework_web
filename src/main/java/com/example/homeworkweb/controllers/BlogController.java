@@ -3,6 +3,7 @@ package com.example.homeworkweb.controllers;
 import com.example.homeworkweb.models.dtos.CreateNewBlogDTO;
 import com.example.homeworkweb.models.dtos.UpdateBlogDTO;
 import com.example.homeworkweb.services.BlogService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class BlogController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createNewBlog(@RequestBody CreateNewBlogDTO createNewBlogDTO) {
+    public ResponseEntity<?> createNewBlog(@Valid @RequestBody CreateNewBlogDTO createNewBlogDTO) {
         return ResponseEntity.ok(blogService.createNewBlog(createNewBlogDTO));
     }
 
@@ -43,7 +44,7 @@ public class BlogController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateBlog(@RequestBody UpdateBlogDTO updateBlogDTO) {
+    public ResponseEntity<?> updateBlog(@Valid @RequestBody UpdateBlogDTO updateBlogDTO) {
         return ResponseEntity.ok(blogService.updateBlog(updateBlogDTO));
     }
 
